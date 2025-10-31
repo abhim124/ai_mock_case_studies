@@ -1,7 +1,12 @@
 import { getRandomInterviewCover } from "@/lib/utils";
-import { openai } from "@ai-sdk/openai"
+import {createOpenAI,} from "@ai-sdk/openai"
 import {db} from "@/firebase/admin";
 import {generateText} from "ai";
+
+const openai = createOpenAI({
+    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    baseURL: process.env.OPENAI_BASE_URL
+});
 
 export async function GET(){
     return Response.json({ success: true, data: 'THANK YOU!'}, {status: 200});
@@ -12,7 +17,7 @@ export async function POST(request: Request){
 
     try {
         const {text: questions } = await generateText({
-                    model: openai('openai/gpt-oss-20b'),
+                    model: openai('openai/gpt-oss-20b:free'),
                     prompt: `Prepare questions for a DECA case study.
                 The category of the case study should be: ${category}.
                 The instructional area should be : ${ia}.
